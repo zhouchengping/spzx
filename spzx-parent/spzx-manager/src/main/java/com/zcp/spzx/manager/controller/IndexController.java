@@ -36,6 +36,10 @@ public class IndexController {
     @Autowired
     private ValidateCodeService validateCodeService;
 
+    /**
+     * 生成验证码
+     * @return
+     */
     @GetMapping(value = "/generateValidateCode")
     public Result<ValidateCodeVo> generateValidateCode() {
         ValidateCodeVo validateCodeVo = validateCodeService.generateValidateCode();
@@ -44,6 +48,8 @@ public class IndexController {
 
     @GetMapping(value = "/getUserInfo")
     public Result<SysUser> getUserInfo() {
+//        System.out.println(AuthContextUtil.get());
+//        System.out.println("11111111111111111111111111111111111111111111");
         return Result.build(AuthContextUtil.get(), ResultCodeEnum.SUCCESS);
     }
 //    public Result<SysUser> getUserInfo(@RequestHeader(name = "token") String token) {

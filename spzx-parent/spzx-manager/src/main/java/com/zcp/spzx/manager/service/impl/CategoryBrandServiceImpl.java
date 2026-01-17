@@ -24,6 +24,8 @@ public class CategoryBrandServiceImpl implements CategoryBrandService {
         List<CategoryBrand> categoryBrandList = categoryBrandMapper.findByPage(CategoryBrandDto) ;
         return new PageInfo<>(categoryBrandList);
     }
+
+
     @Override
     public void save(CategoryBrand categoryBrand) {
         categoryBrandMapper.save(categoryBrand) ;

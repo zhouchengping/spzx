@@ -44,7 +44,7 @@ public class LoginAuthInterceptor implements HandlerInterceptor {
         }
 
         //4 如果token不为空，拿着token查询redis
-        String userInfoString = redisTemplate.opsForValue().get("user:login" + token);
+        String userInfoString = redisTemplate.opsForValue().get("user:login:" + token);
 
         //5 如果redis查询不到数据，返回错误提示
         if(StrUtil.isEmpty(userInfoString)) {
@@ -57,7 +57,7 @@ public class LoginAuthInterceptor implements HandlerInterceptor {
         AuthContextUtil.set(sysUser);
 
         //7 把redis用户信息数据更新过期时间
-        redisTemplate.expire("user:login" + token,30, TimeUnit.MINUTES);
+        redisTemplate.expire("user:login:" + token,30, TimeUnit.MINUTES);
 
         //8 放行
         return true;

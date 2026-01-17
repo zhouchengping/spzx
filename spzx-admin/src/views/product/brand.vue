@@ -33,11 +33,11 @@
             <img :src="scope.row.logo" width="50" />
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间" />
-        <el-table-column label="操作" align="center" width="200" >
-            <el-button type="primary" size="small">
+        <el-table-column label="操作" align="center" width="200" #default="scope">
+            <el-button type="primary" size="small"  @click="updata(scope.row)">
                 修改
             </el-button>
-            <el-button type="danger" size="small">
+            <el-button type="danger" size="small"  @click="deleteById(scope.row)">
                 删除
             </el-button>
         </el-table-column>
@@ -57,7 +57,7 @@
 
 <script setup>
 import { ref , onMounted } from 'vue'
-import { GetBrandPageList , SaveBrand } from '@/api/brand.js'
+import { GetBrandPageList , SaveBrand, updateBrand, deleteBrandById,FindAllBrand } from '@/api/brand.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useApp } from '@/pinia/modules/app'
 ///////////////////////////////添加
@@ -80,25 +80,88 @@ const addShow = () => {
     dialogVisible.value = true 
 }
 
+
+
+
+// 显示添加品牌表单
+const updata = (row) => {
+     //对象拓展运算符  
+     console.log(row)
+    brand.value = {...row}
+    dialogVisible.value = true
+}
+
+
+
 //上传
 const handleAvatarSuccess = (response) => {
   brand.value.logo = response.data
 }
 
 // 保存数据
-const saveOrUpdate = () => {
-  if (!brand.value.id) {
-    saveData()
-  } 
+// const saveOrUpdate = () => {
+//   if (!brand.value.id) {
+//     saveData()
+//   } 
+//   updataData()
+// }
+
+
+const saveOrUpdate = async ()=> {
+     if (!brand.value.id) {//没有id，添加操作
+        const {code} = await SaveBrand(brand.value)
+        if(code === 200) {
+            //关闭弹框
+            dialogVisible.value = false
+            //提示信息
+            ElMessage.success('操作成功')
+            //刷新页面
+            fetchData()
+        }
+    } else {//有id，修改操作
+        const {code} = await updateBrand(brand.value)
+        if(code === 200) {
+            dialogVisible.value = false
+            ElMessage.success("操作成功")
+            fetchData()
+        }
+    }
 }
 
-// 新增
-const saveData = async () => {
-  await SaveBrand(brand.value)
-  dialogVisible.value = false
-  ElMessage.success('操作成功')
-  fetchData()
+
+// // 新增
+// const saveData = async () => {
+//   await SaveBrand(brand.value)
+//   dialogVisible.value = false
+//   ElMessage.success('操作成功')
+//   fetchData()
+// }
+
+
+
+// //xiugai
+// const updataData = async () => {
+//   await updateBrand(brand.value)
+//   dialogVisible.value = false
+//   ElMessage.success('操作成功')
+//   fetchData()
+// }
+
+/////////////////////////////角色删除
+const deleteById = (row)=>{
+    ElMessageBox.confirm('此操作将永久删除该记录, 是否继续?', 'Warning', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+    }).then(async () => {
+      const {code} = await deleteBrandById(row.id)
+      if(code === 200) {
+        ElMessage.success("删除成功")
+        fetchData()
+      }
+    })
 }
+
 ///////////////////////////////
 // 定义表格数据模型
 const list = ref([])

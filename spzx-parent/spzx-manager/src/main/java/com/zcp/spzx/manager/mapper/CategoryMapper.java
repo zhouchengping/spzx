@@ -14,6 +14,6 @@ public interface CategoryMapper {
     public abstract List<Category> selectAll();
 
 
-    public abstract void batchInsert(List<Category> categoryList);
+    public abstract void batchInsert(List<CategoryExcelVo> categoryList);
 
 }

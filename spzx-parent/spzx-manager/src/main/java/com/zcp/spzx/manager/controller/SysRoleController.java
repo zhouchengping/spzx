@@ -1,6 +1,7 @@
 package com.zcp.spzx.manager.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.zcp.spzx.common.log.annotation.Log;
 import com.zcp.spzx.manager.service.SysRoleService;
 import com.zcp.spzx.model.dto.system.SysRoleDto;
 import com.zcp.spzx.model.entity.system.SysRole;
@@ -19,13 +20,16 @@ public class SysRoleController {
     private SysRoleService sysRoleService ;
 
     @PostMapping("/findByPage/{pageNum}/{pageSize}")
-    public Result<PageInfo<SysRole>> findByPage(@RequestBody SysRoleDto sysRoleDto ,
+    public Result<PageInfo<SysRole>> findByPage(
                                                 @PathVariable(value = "pageNum") Integer pageNum ,
-                                                @PathVariable(value = "pageSize") Integer pageSize) {
+                                                @PathVariable(value = "pageSize") Integer pageSize,
+                                                @RequestBody SysRoleDto sysRoleDto ) {
+
         PageInfo<SysRole> pageInfo = sysRoleService.findByPage(sysRoleDto , pageNum , pageSize) ;
         return Result.build(pageInfo , ResultCodeEnum.SUCCESS) ;
     }
 
+    @Log(title = "角色添加",businessType = 0) //添加Log注解，设置属性
     @PostMapping(value = "/saveSysRole")
     public Result saveSysRole(@RequestBody SysRole SysRole) {
         sysRoleService.saveSysRole(SysRole) ;
@@ -49,6 +53,7 @@ public class SysRoleController {
         Map<String, Object> resultMap = sysRoleService.findAllRoles();
         return Result.build(resultMap , ResultCodeEnum.SUCCESS)  ;
     }
+
     @GetMapping(value = "/findAllRoles/{userId}")
     public Result<Map<String , Object>> findAllRoles(@PathVariable(value = "userId") Long userId) {
         Map<String, Object> resultMap = sysRoleService.findAllRoles(userId);

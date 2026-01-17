@@ -44,10 +44,11 @@ public class ExcelListener<T> extends AnalysisEventListener<T> {
     public void doAfterAllAnalysed(AnalysisContext analysisContext) {
         // excel解析完毕以后需要执行的代码
         // 这里也要保存数据，确保最后遗留的数据也存储到数据库
+        //也就是数据不够BATCH_COUNT的时候,直接调用这个方法
         saveData();
     }
 
     private void saveData() {
-        categoryMapper.batchInsert(cachedDataList);
+        categoryMapper.batchInsert((List<CategoryExcelVo>) cachedDataList);
     }
 }

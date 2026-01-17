@@ -96,18 +96,16 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public void saveSysUser(SysUser sysUser) {
-
         // 根据输入的用户名查询用户
         SysUser dbSysUser = sysUserMapper.findByUserName(sysUser.getUserName()) ;
         if(dbSysUser != null) {
             throw new GuiguException(ResultCodeEnum.USER_NAME_IS_EXISTS) ;
         }
-
         // 对密码进行加密
         String password = sysUser.getPassword();
         String digestPassword = DigestUtils.md5DigestAsHex(password.getBytes());
         sysUser.setPassword(digestPassword);
-        sysUser.setStatus(0);
+        sysUser.setStatus(1);
         sysUserMapper.saveSysUser(sysUser) ;
     }
 
@@ -130,7 +128,6 @@ public class SysUserServiceImpl implements SysUserService {
 
         // 删除之前的所有的用户所对应的角色数据
         sysRoleUserMapper.deleteByUserId(assginRoleDto.getUserId()) ;
-
         // 分配新的角色数据
         List<Long> roleIdList = assginRoleDto.getRoleIdList();
         roleIdList.forEach(roleId->{

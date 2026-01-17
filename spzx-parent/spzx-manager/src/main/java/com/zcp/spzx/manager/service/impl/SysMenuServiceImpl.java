@@ -36,27 +36,20 @@ public class SysMenuServiceImpl implements SysMenuService {
     @Transactional
     @Override
     public void save(SysMenu sysMenu) {
-
         // 添加新的节点
         sysMenuMapper.insert(sysMenu) ;
-
         // 新添加一个菜单，那么此时就需要将该菜单所对应的父级菜单设置为半开
         updateSysRoleMenuIsHalf(sysMenu) ;
     }
 
     private void updateSysRoleMenuIsHalf(SysMenu sysMenu) {
-
         // 查询是否存在父节点
         SysMenu parentMenu = sysMenuMapper.selectById(sysMenu.getParentId());
-
         if(parentMenu != null) {
-
-            // 将该id的菜单设置为半开
+            // 将该id的菜单设置为半开，，是为了前端查询角色权限的时候，状态的选择，新增了一个菜单，还没有分配权限
             sysRoleMenuMapper.updateSysRoleMenuIsHalf(parentMenu.getId()) ;
-
             // 递归调用
             updateSysRoleMenuIsHalf(parentMenu) ;
-
         }
 
     }
@@ -72,14 +65,12 @@ public class SysMenuServiceImpl implements SysMenuService {
         }
         sysMenuMapper.deleteById(id);		// 不存在子菜单直接删除
     }
+    //动态路由
     @Override
     public List<SysMenuVo> findUserMenuList() {
-
         SysUser sysUser = AuthContextUtil.get();
         Long userId = sysUser.getId();          // 获取当前登录用户的id
-
         List<SysMenu> sysMenuList = sysMenuMapper.selectListByUserId(userId) ;
-
         //构建树形数据
         List<SysMenu> sysMenuTreeList = MenuHelper.buildTree(sysMenuList);
         return this.buildMenus(sysMenuTreeList);
@@ -87,7 +78,6 @@ public class SysMenuServiceImpl implements SysMenuService {
 
     // 将List<SysMenu>对象转换成List<SysMenuVo>对象
     private List<SysMenuVo> buildMenus(List<SysMenu> menus) {
-
         List<SysMenuVo> sysMenuVoList = new LinkedList<SysMenuVo>();
         for (SysMenu sysMenu : menus) {
             SysMenuVo sysMenuVo = new SysMenuVo();

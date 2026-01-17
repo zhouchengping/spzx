@@ -30,6 +30,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                     .credentials(minioProperties.getAccessKey(), minioProperties.getSecreKey())
                     .build();
 
+
             // 判断桶是否存在
             boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(minioProperties.getBucketName()).build());
             if (!found) {       // 如果不存在，那么此时就创建一个新的桶

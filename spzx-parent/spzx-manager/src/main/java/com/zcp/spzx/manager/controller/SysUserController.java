@@ -19,9 +19,10 @@ public class SysUserController {
     private SysUserService sysUserService ;
 
     @GetMapping(value = "/findByPage/{pageNum}/{pageSize}")
-    public Result<PageInfo<SysRole>> findByPage(SysUserDto sysUserDto ,
+    public Result<PageInfo<SysRole>> findByPage(
                                                 @PathVariable(value = "pageNum") Integer pageNum ,
-                                                @PathVariable(value = "pageSize") Integer pageSize) {
+                                                @PathVariable(value = "pageSize") Integer pageSize,
+                                                SysUserDto sysUserDto) {
         PageInfo<SysUser> pageInfo = sysUserService.findByPage(sysUserDto , pageNum , pageSize) ;
         return Result.build(pageInfo , ResultCodeEnum.SUCCESS) ;
     }
@@ -34,6 +35,7 @@ public class SysUserController {
 
     @PutMapping(value = "/updateSysUser")
     public Result updateSysUser(@RequestBody SysUser sysUser) {
+//        System.out.println(sysUser);
         sysUserService.updateSysUser(sysUser) ;
         return Result.build(null , ResultCodeEnum.SUCCESS) ;
     }
@@ -43,7 +45,7 @@ public class SysUserController {
         sysUserService.deleteById(userId) ;
         return Result.build(null , ResultCodeEnum.SUCCESS) ;
     }
-
+    //分配角色
     @PostMapping("/doAssign")
     public Result doAssign(@RequestBody AssginRoleDto assginRoleDto) {
         sysUserService.doAssign(assginRoleDto) ;

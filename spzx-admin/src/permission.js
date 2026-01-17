@@ -35,7 +35,9 @@
 
 import { ElLoading } from 'element-plus'
 import router from '@/router'
-// import store from '@/store'
+// # 将permission.js中的相关代码
+// # 原代码：import { TOKEN } from '@/store/modules/app' // TOKEN变量名
+// # 更改为如下代码：
 import { TOKEN } from '@/pinia/modules/app' // TOKEN变量名
 import { nextTick } from 'vue'
 import { useApp } from './pinia/modules/app'

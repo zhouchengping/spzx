@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.zcp.spzx.mapper.SysMenuMapper">
+<mapper namespace="com.zcp.spzx.manager.mapper.SysMenuMapper">
 
     <resultMap id="sysMenuMap" type="com.zcp.spzx.model.entity.system.SysMenu" autoMapping="true"></resultMap>
 
@@ -67,16 +67,16 @@
 
     <update id="deleteById">
         update sys_menu set
-                            update_time = now() ,
-                            is_deleted = 1
+           update_time = now() ,
+           is_deleted = 1
         where
             id = #{id}
     </update>
 
     <select id="selectListByUserId" resultMap="sysMenuMap">
         SELECT DISTINCT m.* FROM sys_menu m
-                                     INNER JOIN sys_role_menu rm ON rm.menu_id = m.id
-                                     INNER JOIN sys_user_role ur ON ur.role_id = rm.role_id
+          INNER JOIN sys_role_menu rm ON rm.menu_id = m.id
+          INNER JOIN sys_user_role ur ON ur.role_id = rm.role_id
         WHERE ur.user_id=#{userId} and m.is_deleted = 0
     </select>
 

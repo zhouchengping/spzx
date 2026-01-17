@@ -73,10 +73,13 @@
         <if test="phone != null and phone != ''">
             phone = #{phone},
         </if>
+        <if test="avatar != null and avatar != ''">
+            avatar = #{avatar},
+        </if>
         <if test="description != null and description != ''">
             description = #{description},
         </if>
-        <if test="status != null and status != ''">
+        <if test="status != null">
             status = #{status},
         </if>
         update_time =  now()
@@ -86,8 +89,8 @@
 
     <update id="deleteById">
         update sys_user set
-                            update_time = now() ,
-                            is_deleted = 1
+          update_time = now() ,
+          is_deleted = 1
         where
             id = #{id}
     </update>
